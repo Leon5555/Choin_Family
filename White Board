@@ -1,0 +1,51 @@
+I set up a GitHub spot to be able to work on code.  https://github.com/PaulChoin/Choin_Family
+Also, I created a project board so we know what needs to be done and can keep track of who is working on what and when https://github.com/PaulChoin/Choin_Family/projects/2
+
+I'm not too familiar with how github works, but I'm looking forward to using this project to get the hang of it.  I think the base is that we should be able to Pull code from the repository, work on it as a Branch, and then Commit back to Master.  This will keep track of what changes are made and enable us to go back if needed.
+
+-Paul
+
+On Wed, Dec 16, 2020 at 7:12 PM <lchoin@gmail.com> wrote:
+Hi Paul,
+ 
+Here are some of the notes that I took down while we where talking the other day about making some Bots. Lets keep the conversation going, this sounds like it will be a fun project. What RFID unit should I get to start playing around with this. Also, do you know the part numbers of the Adafruit Feather wing and shield you are using?
+ 
+I am sending you a picture of the bot I picked up at the Goodwill Store, got it working and even found the manual online for it. It can move, record sound, come back to home and play a track?
+ 
+Please add your thoughts below and return, or maybe we can use the GitHub account to start this going?
+ 
+Dad
+ 
+ 
+RFID, I haven't used this yet but I will put it at the top of my next project/ experiment list to learn how.
+ 
+Interchangeable Base / Power Units
+ 
+Customizable Upper Bot Assemblies,  
+ 
+Paul has code already written.
+ 
+Paul using Adafruit Feather Wing and Feather Wing Shield, (what part numbers?)
+ 
+ 
+Ninja puppy dog ears - that rotate or wave.  (offset pin on drive horn)
+ 
+Laser Cannon, IR beam could trip sensor - down side IR bounces off everything, wouldn't even need to point at target without using some kind of narrow beam, like a Laser?? Safety with the Kids.
+ 
+I found some laser tag guns at a garage sale, going to open them up and see if we could miniaturize to use on bots.
+ 
+Also found a pretty neat bot that can be on-board programmed. And it has a calibration routine as well. Could build something using this platform. It is using tank tracks to drive.
+ 
+Water Cannon that could trip sensor after filling a cup (out door use)
+Pappa would need a much larger Water Cannon than kids.
+Adafruit Water pump (3V DC motor) + clear PVC tubing
+ 
+I have found that the TT Motor Bi-Metal Gearbox 1:90 Gear Ratio at Adafruit work well for drive motors. The 1:48 ratio lacked power.
+ 
+I have some continuous rotation servos to play around with to use as drive motors. Easy to add wheels or tracks. Also might be easier to calibrate with software?
+ 
+If we are going to ram and rumble there should be some kind of current limiter at power source to keep from over loading and heating when a pile up occurs. A fuse, circuit breaker, time delay fuse, something.
+ 
+MP3 triggers to create sound tracks, 3.3v
+ 
+Drone Bot, to use as a target.  I have found to increase the accuracy of the drone you need to power 8.4 or above and regulate to 6 volts for the drive and run the Arduinos at 3.3v
