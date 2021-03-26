@@ -1,0 +1,126 @@
+/*
+  nRF24L01+ Joystick Receiver for Robot Car
+  nrf24l01-joy-rcv-car.ino
+  nRF24L01+ Receiver and L298N driver for Robot Car
+  Use with Joystick Transmitter for Robot Car
+  DroneBot Workshop 2018
+  https://dronebotworkshop.com
+  modified Motor A and B connections, added RadioDriver(2, 12) for CE and CSN
+  added pinMode 13 as pilot light for feather LRC 3/15/21 Still trouble shooting radio control
+3/15/21 tried wrapping radio in tinfoil, no good, tried adding a 10uf cap directly to
+to gnd and vcc on radio, small improvement, but still no good. removed radio from chassis, 
+seperate power supply, working! Wires coming out of joystick on right side forward and rev
+OK, but left and right are backwards. Changed for and rev on xmit-car now with wires
+on joystick to the left all directions are correct.  LRC
+  
+*/
+ 
+// Include RadioHead ReliableDatagram & NRF24 Libraries
+#include <RHReliableDatagram.h>
+#include <RH_NRF24.h>
+
+
+ 
+// Include dependant SPI Library 
+#include <SPI.h>
+
+
+ 
+// Define addresses for radio channels
+#define CLIENT_ADDRESS 42    // changed from 1 to 42 LRC 3/26/21  OK!
+#define SERVER_ADDRESS 43   //  changed from 2 to 43  working, also need to change xmit
+ 
+ 
+// Motor A Connections
+int enA = 3;
+int in1 = 6;
+int in2 = 5;
+ 
+// Motor B Connections
+int enB = 11;
+int in3 = 9;
+int in4 = 10;
+ 
+// Create an instance of the radio driver
+
+RH_NRF24 RadioDriver(2, 12);  // For Adafruit feather 3/6/21 modified code name RadioDriver
+ 
+// Sets the radio driver to NRF24 and the server address to 2
+RHReliableDatagram RadioManager(RadioDriver, SERVER_ADDRESS);
+ 
+// Define a message to return if values received
+uint8_t ReturnMessage[] = "JoyStick Data Received"; 
+ 
+// Define the Message Buffer
+uint8_t buf[RH_NRF24_MAX_MESSAGE_LEN];
+ 
+void setup()
+{
+  // Setup Serial Monitor
+  Serial.begin(9600);
+  
+  // Set all the motor control pins to outputs
+  pinMode(enA, OUTPUT);
+  pinMode(enB, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+  pinMode(13, OUTPUT);
+
+  analogWrite(13, 100); // added line for pilot light on feather LRC 3/15/21
+  
+  // Initialize RadioManager with defaults - 2.402 GHz (channel 2), 2Mbps, 0dBm
+  if (!RadioManager.init())
+    Serial.println("init failed");
+} 
+ 
+void loop()
+{
+  if (RadioManager.available())
+  {
+ // Wait for a message addressed to us from the client
+    uint8_t len = sizeof(buf);
+    uint8_t from;
+    if (RadioManager.recvfromAck(buf, &len, &from))
+ 
+    {
+ 
+      // Serial Print the values of joystick
+      Serial.print("got request from : 0x");
+      Serial.print(from, HEX);
+      Serial.print(": MotorA = ");
+      Serial.print(buf[0]);
+      Serial.print(" MotorB = ");
+      Serial.print(buf[1]);
+      Serial.print(" Dir = ");
+      Serial.println(buf[2]);
+      
+      // Set Motor Direction
+      if (buf[2] == 1)
+      {
+    // Motors are backwards
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, HIGH);
+    }else{
+    // Motors are forwards
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+     }
+ 
+      
+      // Drive Motors
+      analogWrite(enA, buf[1]);
+      analogWrite(enB, buf[0]);
+     
+      // Send a reply back to the originator client, check for error
+      if (!RadioManager.sendtoWait(ReturnMessage, sizeof(ReturnMessage), from))
+        Serial.println("sendtoWait failed");
+      delay(10);  // added to see if it would help with refresh rate?? lrc 3/26/21
+    }
+  }              
+}
